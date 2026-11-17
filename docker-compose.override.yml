@@ -1,0 +1,6 @@
+services:
+    ospos:
+        ports: !override
+            - "8080:80"
+        environment:
+            - ALLOWED_HOSTNAMES=localhost,localhost:8080
