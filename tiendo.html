@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chuẩn bị đồ án POS quán cà phê</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one readable column, summary first, then numbered sections in the order the team acts on them */
+:root {
+  --bg: #f5f6f4;
+  --surface: #ffffff;
+  --ink: #1f2421;
+  --muted: #5d6660;
+  --line: #dde1dc;
+  --accent: #6b3f24;      /* espresso */
+  --accent-soft: #f1e7df;
+  --ok: #2f6b45;
+  --warn: #9a5b00;
+  --warn-soft: #fbf0dc;
+  --font-display: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161917;
+    --surface: #1f2320;
+    --ink: #e8ebe8;
+    --muted: #a3aca6;
+    --line: #333934;
+    --accent: #d9a37e;
+    --accent-soft: #33271f;
+    --ok: #7cc597;
+    --warn: #e6b155;
+    --warn-soft: #352b19;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161917;
+  --surface: #1f2320;
+  --ink: #e8ebe8;
+  --muted: #a3aca6;
+  --line: #333934;
+  --accent: #d9a37e;
+  --accent-soft: #33271f;
+  --ok: #7cc597;
+  --warn: #e6b155;
+  --warn-soft: #352b19;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 40px 20px 64px; display: grid; gap: 36px; }
+header { display: grid; gap: 10px; }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+h1 { font-family: var(--font-display); font-size: 32px; line-height: 1.25; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-size: 22px; line-height: 1.3; margin: 0; text-wrap: balance; display: flex; gap: 12px; align-items: baseline; }
+h2 .num { font-family: var(--font-mono); font-size: 15px; color: var(--accent); font-weight: 500; }
+h3 { font-size: 16px; margin: 0; }
+p { margin: 0; max-width: 68ch; }
+.lead { color: var(--muted); font-size: 17px; }
+section { display: grid; gap: 14px; }
+a { color: var(--accent); }
+a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code { font-family: var(--font-mono); font-size: 0.88em; background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; }
+
+.summary {
+  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+  border-radius: 8px; padding: 18px 20px; display: grid; gap: 10px;
+}
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; margin: 0; }
+.facts dt { color: var(--muted); font-size: 14px; }
+.facts dd { margin: 0; font-weight: 500; }
+
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.checklist li {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px; display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start;
+}
+.checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); cursor: pointer; }
+.checklist label { cursor: pointer; display: grid; gap: 2px; }
+.checklist .note { color: var(--muted); font-size: 14px; }
+.checklist li:has(input:checked) label strong { text-decoration: line-through; color: var(--muted); }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; background: var(--bg); }
+tr:last-child td { border-bottom: 0; }
+
+.pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.pill.have { color: var(--ok); border: 1px solid var(--ok); }
+.pill.build { color: var(--accent); border: 1px solid var(--accent); }
+.pill.extra { color: var(--muted); border: 1px solid var(--line); }
+
+.callout {
+  background: var(--warn-soft); border: 1px solid var(--warn); border-radius: 8px;
+  padding: 14px 16px; display: grid; gap: 6px;
+}
+.callout h3 { color: var(--warn); }
+.callout ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.card ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; display: grid; gap: 2px; }
+
+.phases { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.phases li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px dashed var(--line); }
+.phases li:last-child { border-bottom: 0; }
+.phases .step { font-family: var(--font-mono); color: var(--accent); font-weight: 500; padding-top: 1px; }
+.phases p { color: var(--muted); font-size: 15px; }
+
+ol.report { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+ol.report span { color: var(--muted); font-size: 15px; }
+
+footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 16px; }
+
+@media (max-width: 480px) {
+  h1 { font-size: 26px; }
+  .facts { grid-template-columns: 1fr; gap: 0 0; }
+  .facts dd { margin-bottom: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Đồ án Phần mềm mã nguồn mở</div>
+  <h1>Chuẩn bị đồ án: Hệ thống POS quán cà phê trên nền OpenSourcePOS</h1>
+  <p class="lead">Những việc mỗi thành viên cần làm trước khi nhóm bắt đầu code.</p>
+</header>
+
+<div class="summary">
+  <dl class="facts">
+    <dt>Tên đề tài</dt>
+    <dd>Xây dựng hệ thống nguồn mở quản lý bán hàng cho quán cà phê (POS)</dd>
+    <dt>Nền tảng gốc</dt>
+    <dd>OpenSourcePOS (OSPOS), giấy phép MIT, <strong>miễn phí hoàn toàn</strong></dd>
+    <dt>Công nghệ</dt>
+    <dd>PHP 8.2+, CodeIgniter 4, MySQL/MariaDB, Bootstrap, jQuery</dd>
+    <dt>Mã nguồn</dt>
+    <dd><a href="https://github.com/opensourcepos/opensourcepos">github.com/opensourcepos/opensourcepos</a></dd>
+    <dt>Dùng thử online</dt>
+    <dd><a href="https://demo.opensourcepos.org/">demo.opensourcepos.org</a>, tài khoản <code>admin</code>, mật khẩu <code>pointofsale</code></dd>
+  </dl>
+</div>
+
+<section>
+  <h2><span class="num">01</span>Việc mỗi người làm ngay</h2>
+  <p>Tick vào từng mục khi làm xong. Trạng thái chỉ lưu trên trình duyệt của bạn.</p>
+  <ul class="checklist">
+    <li><input type="checkbox" id="c1"><label for="c1"><strong>Tạo tài khoản GitHub</strong><span class="note">Gửi username cho trưởng nhóm để được thêm vào repo của nhóm.</span></label></li>
+    <li><input type="checkbox" id="c2"><label for="c2"><strong>Cài Git và VS Code</strong><span class="note">Cấu hình <code>git config --global user.name</code> và <code>user.email</code> trùng với tài khoản GitHub.</span></label></li>
+    <li><input type="checkbox" id="c3"><label for="c3"><strong>Cài Docker Desktop</strong><span class="note">Windows cần bật WSL2 (Docker sẽ hướng dẫn khi cài). Đây là cách chạy OSPOS dễ nhất, không phải tự cài PHP và MySQL.</span></label></li>
+    <li><input type="checkbox" id="c4"><label for="c4"><strong>Cài Node.js 22 trở lên</strong><span class="note">Cần để build giao diện của OSPOS (<code>npm install</code>, <code>npm run build</code>).</span></label></li>
+    <li><input type="checkbox" id="c5"><label for="c5"><strong>Dùng thử bản demo khoảng 30 phút</strong><span class="note">Thử bán hàng, chọn bàn, thêm món, in hóa đơn, xem báo cáo. Ghi lại chỗ nào chưa hợp với quán cà phê.</span></label></li>
+    <li><input type="checkbox" id="c6"><label for="c6"><strong>Đọc file LICENSE của OSPOS</strong><span class="note">Hiểu giấy phép MIT cho phép gì và yêu cầu gì. Giảng viên môn này thường hỏi phần này.</span></label></li>
+  </ul>
+  <div class="callout">
+    <h3>Lưu ý</h3>
+    <ul>
+      <li><strong>Không dùng XAMPP bản cũ.</strong> OSPOS yêu cầu PHP từ 8.2 trở lên kèm extension <code>intl</code> và <code>gd</code>. XAMPP phổ biến hiện nay đi kèm PHP 8.0 hoặc 8.2 bản cũ nên không chạy được.</li>
+      <li><strong>Chỉ tải từ GitHub chính thức.</strong> Một số trang bán lại OSPOS với giá khoảng $39. Đó là tiền dịch vụ hỗ trợ của bên thứ ba, nhóm không cần mua.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">02</span>Kiến thức cần ôn trước</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Backend</h3>
+      <ul>
+        <li>PHP cơ bản và lập trình hướng đối tượng</li>
+        <li>CodeIgniter 4: mô hình MVC, Routes, Migrations</li>
+        <li>MySQL: truy vấn, khóa ngoại, JOIN</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Frontend</h3>
+      <ul>
+        <li>HTML, CSS, Bootstrap</li>
+        <li>jQuery và gọi AJAX</li>
+        <li>Đọc hiểu View của CodeIgniter</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Làm việc nhóm</h3>
+      <ul>
+        <li>Git: branch, commit, pull, merge</li>
+        <li>GitHub: fork, Pull Request, Issues</li>
+        <li>Xử lý xung đột khi merge</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Lý thuyết nguồn mở</h3>
+      <ul>
+        <li>Các loại giấy phép: MIT, GPL, Apache</li>
+        <li>Fork và đóng góp cho dự án nguồn mở</li>
+        <li>Mô hình kinh doanh của phần mềm nguồn mở</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">03</span>OSPOS có sẵn gì, nhóm làm thêm gì</h2>
+  <p>Mục "có sẵn" lấy từ mã nguồn OSPOS. Khi chạy thử, nhóm cần kiểm tra lại mức độ đáp ứng thực tế với quán cà phê.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Chức năng</th><th>Trạng thái</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td>Bán hàng, thanh toán</td><td><span class="pill have">Có sẵn</span></td><td>Module Sales</td></tr>
+        <tr><td>Chọn bàn khi bán</td><td><span class="pill have">Có sẵn</span></td><td>Dinner tables, bật trong phần cấu hình</td></tr>
+        <tr><td>Quản lý món (menu)</td><td><span class="pill have">Có sẵn</span></td><td>Dùng module Items làm thực đơn</td></tr>
+        <tr><td>In hóa đơn</td><td><span class="pill have">Có sẵn</span></td><td>Có hóa đơn in và xuất PDF</td></tr>
+        <tr><td>Nhân viên, phân quyền</td><td><span class="pill have">Có sẵn</span></td><td>Module Employees</td></tr>
+        <tr><td>Báo cáo, biểu đồ</td><td><span class="pill have">Có sẵn</span></td><td>Module Reports</td></tr>
+        <tr><td>Giao diện tiếng Việt</td><td><span class="pill have">Có sẵn</span></td><td>Cần kiểm tra bản dịch còn thiếu và định dạng VNĐ</td></tr>
+        <tr><td>Sơ đồ bàn trực quan, chuyển bàn, gộp bàn</td><td><span class="pill build">Nhóm làm</span></td><td>Phần đóng góp chính</td></tr>
+        <tr><td>Ghi chú món (ít đá, ít đường), chọn size</td><td><span class="pill build">Nhóm làm</span></td><td>Đặc thù quán cà phê</td></tr>
+        <tr><td>Mẫu hóa đơn quán cà phê</td><td><span class="pill build">Nhóm làm</span></td><td>Có số bàn, ghi chú món</td></tr>
+        <tr><td>Báo cáo doanh thu theo ngày, món bán chạy</td><td><span class="pill build">Nhóm làm</span></td><td>Tùy biến từ Reports</td></tr>
+        <tr><td>Khách quét QR tại bàn để gọi món</td><td><span class="pill extra">Nâng cao</span></td><td>Làm nếu còn thời gian</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">04</span>Phân công gợi ý</h2>
+  <p>Điều chỉnh theo số người trong nhóm. Một người có thể nhận hai vai trò.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Vai trò</th><th>Công việc</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Trưởng nhóm</strong></td><td>Fork repo, quản lý branch và Pull Request, chia việc, tổng hợp báo cáo</td></tr>
+        <tr><td><strong>Backend</strong></td><td>Controller và Model cho bàn, ghi chú món, size, báo cáo doanh thu</td></tr>
+        <tr><td><strong>Frontend</strong></td><td>Giao diện sơ đồ bàn, màn hình gọi món, mẫu hóa đơn</td></tr>
+        <tr><td><strong>Phân tích, CSDL</strong></td><td>Khảo sát nghiệp vụ quán cà phê, vẽ use case, ERD, thiết kế bảng mới</td></tr>
+        <tr><td><strong>Kiểm thử, tài liệu</strong></td><td>Viết test case, README hướng dẫn cài đặt, slide thuyết trình</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">05</span>Lộ trình</h2>
+  <ol class="phases">
+    <li><span class="step">GĐ1</span><div><h3>Tìm hiểu</h3><p>Cài đặt công cụ, chạy được OSPOS trên máy, dùng thử và liệt kê chức năng.</p></div></li>
+    <li><span class="step">GĐ2</span><div><h3>Phân tích, thiết kế</h3><p>Khảo sát quán cà phê, chốt danh sách chức năng làm thêm, vẽ use case, ERD, phác thảo giao diện.</p></div></li>
+    <li><span class="step">GĐ3</span><div><h3>Phát triển</h3><p>Mỗi người làm trên branch riêng, gửi Pull Request để trưởng nhóm duyệt.</p></div></li>
+    <li><span class="step">GĐ4</span><div><h3>Kiểm thử, đóng gói</h3><p>Chạy test case, sửa lỗi, viết README và hướng dẫn cài đặt.</p></div></li>
+    <li><span class="step">GĐ5</span><div><h3>Báo cáo, thuyết trình</h3><p>Hoàn thiện báo cáo, slide, chuẩn bị dữ liệu demo.</p></div></li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="num">06</span>Khung báo cáo gợi ý</h2>
+  <ol class="report">
+    <li><strong>Tổng quan về phần mềm nguồn mở</strong> <span>khái niệm, giấy phép MIT, lý do chọn nguồn mở</span></li>
+    <li><strong>Giới thiệu OpenSourcePOS và công nghệ</strong> <span>PHP, CodeIgniter 4, MySQL, kiến trúc MVC</span></li>
+    <li><strong>Phân tích và thiết kế</strong> <span>nghiệp vụ quán cà phê, use case, ERD, giao diện</span></li>
+    <li><strong>Cài đặt và phát triển</strong> <span>các chức năng nhóm bổ sung, so sánh trước và sau</span></li>
+    <li><strong>Kiểm thử, kết luận, hướng phát triển</strong></li>
+  </ol>
+</section>
+
+<footer>
+  OpenSourcePOS © các tác giả gốc, phát hành theo giấy phép MIT. Nhóm giữ nguyên thông tin bản quyền gốc khi phát triển thêm.
+</footer>
+
+</div>
+<script>
+(function () {
+  var key = "pos-cafe-checklist";
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) { saved = {}; }
+  document.querySelectorAll(".checklist input").forEach(function (box) {
+    if (saved[box.id]) box.checked = true;
+    box.addEventListener("change", function () {
+      saved[box.id] = box.checked;
+      try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {}
+    });
+  });
+})();
+</script>
+</body>
+</html>
