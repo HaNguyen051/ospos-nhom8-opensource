@@ -5,16 +5,16 @@
  * Monetary values use OSPOS to_currency() and the configured Vietnamese locale.
  * Do not duplicate payment/tax calculations here.
  */
-$receiptFontSize = max(10, min(20, (int)($config['receipt_font_size'] ?? 12)));
-$tableId = isset($dinner_table) ? (int)$dinner_table : 0;
-$tableLabel = $tableId === 1 ? 'Giao hàng' : ($tableId === 2 ? 'Mang đi' : ($tableId > 2 ? 'Bàn số ' . $tableId : ''));
-$showTaxes = !empty($config['receipt_show_taxes']);
-$showTotalDiscount = !empty($config['receipt_show_total_discount']);
-$showDescriptions = !empty($config['receipt_show_description']);
-$showSerials = !empty($config['receipt_show_serialnumber']);
-$showTaxFlags = !empty($config['receipt_show_tax_ind']);
+$receiptFontSize   = max(10, min(20, (int) ($config['receipt_font_size'] ?? 12)));
+$tableId           = isset($dinner_table) ? (int) $dinner_table : 0;
+$tableLabel        = $tableId === 1 ? 'Giao hàng' : ($tableId === 2 ? 'Mang đi' : ($tableId > 2 ? 'Bàn số ' . $tableId : ''));
+$showTaxes         = ! empty($config['receipt_show_taxes']);
+$showTotalDiscount = ! empty($config['receipt_show_total_discount']);
+$showDescriptions  = ! empty($config['receipt_show_description']);
+$showSerials       = ! empty($config['receipt_show_serialnumber']);
+$showTaxFlags      = ! empty($config['receipt_show_tax_ind']);
 // Cafe POS is the default receipt brand. The administrator can change it in Configuration > Company.
-$companyName = trim((string)($config['company'] ?? ''));
+$companyName = trim((string) ($config['company'] ?? ''));
 if ($companyName === '') {
     $companyName = 'Cafe POS';
 }
@@ -53,81 +53,83 @@ if ($companyName === '') {
 </style>
 <div id="receipt_wrapper" class="cafe-receipt" style="font-size: <?= $receiptFontSize ?>px;">
   <div id="receipt_header" class="cafe-center">
-    <?php if (!empty($config['company_logo'])): ?>
+    <?php if (! empty($config['company_logo'])): ?>
       <div class="cafe-logo"><img src="<?= base_url('uploads/' . esc($config['company_logo'], 'url')) ?>" alt="Logo quán"></div>
     <?php endif; ?>
     <div class="cafe-name"><?= esc($companyName) ?></div>
-    <?php if (!empty($config['address'])): ?><div><?= nl2br(esc($config['address'])) ?></div><?php endif; ?>
-    <?php if (!empty($config['phone'])): ?><div>Điện thoại: <?= esc($config['phone']) ?></div><?php endif; ?>
+    <?php if (! empty($config['address'])): ?><div><?= nl2br(esc($config['address'])) ?></div><?php endif; ?>
+    <?php if (! empty($config['phone'])): ?><div>Điện thoại: <?= esc($config['phone']) ?></div><?php endif; ?>
     <div class="cafe-subtitle">PHIẾU THANH TOÁN</div>
-    <div class="cafe-muted"><?= esc((string)($transaction_time ?? '')) ?></div>
+    <div class="cafe-muted"><?= esc((string) ($transaction_time ?? '')) ?></div>
   </div>
   <hr class="cafe-rule">
   <div id="receipt_general_info">
-    <div class="cafe-row"><span>Mã đơn:</span><strong><?= esc((string)($sale_id ?? '')) ?></strong></div>
-    <?php if (!empty($invoice_number)): ?>
-      <div class="cafe-row"><span>Số hóa đơn:</span><span><?= esc((string)$invoice_number) ?></span></div>
+    <div class="cafe-row"><span>Mã đơn:</span><strong><?= esc((string) ($sale_id ?? '')) ?></strong></div>
+    <?php if (! empty($invoice_number)): ?>
+      <div class="cafe-row"><span>Số hóa đơn:</span><span><?= esc((string) $invoice_number) ?></span></div>
     <?php endif; ?>
     <?php if ($tableLabel !== ''): ?>
       <div class="cafe-row"><span>Hình thức / bàn:</span><strong><?= esc($tableLabel) ?></strong></div>
     <?php endif; ?>
-    <?php if (!empty($employee)): ?><div class="cafe-row"><span>Nhân viên:</span><span><?= esc($employee) ?></span></div><?php endif; ?>
-    <?php if (!empty($customer)): ?><div class="cafe-row"><span>Khách hàng:</span><span><?= esc($customer) ?></span></div><?php endif; ?>
+    <?php if (! empty($employee)): ?><div class="cafe-row"><span>Nhân viên:</span><span><?= esc($employee) ?></span></div><?php endif; ?>
+    <?php if (! empty($customer)): ?><div class="cafe-row"><span>Khách hàng:</span><span><?= esc($customer) ?></span></div><?php endif; ?>
   </div>
   <hr class="cafe-rule">
   <table id="receipt_items" class="cafe-items">
     <thead><tr><th>Món / sản phẩm</th><th>Đơn giá</th><th>SL</th><th>Thành tiền</th></tr></thead>
     <tbody>
     <?php foreach (($cart ?? []) as $item): ?>
-      <?php if (($item['print_option'] ?? null) != PRINT_YES) { continue; } ?>
+      <?php if (($item['print_option'] ?? null) !== PRINT_YES) {
+          continue;
+      } ?>
       <?php
-        $displayName = trim((string)($item['name'] ?? '') . ' ' . (string)($item['attribute_values'] ?? ''));
+        $displayName  = trim((string) ($item['name'] ?? '') . ' ' . (string) ($item['attribute_values'] ?? ''));
         $lineTotalKey = $showTotalDiscount ? 'total' : 'discounted_total';
-        $lineTotal = $item[$lineTotalKey] ?? $item['discounted_total'] ?? 0;
-        $description = trim((string)($item['description'] ?? ''));
-        $serialNumber = trim((string)($item['serialnumber'] ?? ''));
-      ?>
+        $lineTotal    = $item[$lineTotalKey] ?? $item['discounted_total'] ?? 0;
+        $description  = trim((string) ($item['description'] ?? ''));
+        $serialNumber = trim((string) ($item['serialnumber'] ?? ''));
+        ?>
       <tr>
         <td><strong><?= esc($displayName) ?></strong></td>
         <td class="cafe-number"><?= to_currency($item['price'] ?? 0) ?></td>
         <td class="cafe-quantity"><?= to_quantity_decimals($item['quantity'] ?? 0) ?></td>
         <td class="cafe-number"><?= to_currency($lineTotal) ?></td>
       </tr>
-      <?php if (($showDescriptions && $description !== '') || ($showSerials && $serialNumber !== '') || ($showTaxFlags && !empty($item['taxed_flag']))): ?>
+      <?php if (($showDescriptions && $description !== '') || ($showSerials && $serialNumber !== '') || ($showTaxFlags && ! empty($item['taxed_flag']))): ?>
       <tr><td class="cafe-note" colspan="4">
         <?php if ($showDescriptions && $description !== ''): ?>Ghi chú/mô tả: <?= esc($description) ?><?php endif; ?>
         <?php if ($showSerials && $serialNumber !== ''): ?><?= $description !== '' ? ' · ' : '' ?>Số sê-ri: <?= esc($serialNumber) ?><?php endif; ?>
-        <?php if ($showTaxFlags && !empty($item['taxed_flag'])): ?><?= esc((string)$item['taxed_flag']) ?><?php endif; ?>
+        <?php if ($showTaxFlags && ! empty($item['taxed_flag'])): ?><?= esc((string) $item['taxed_flag']) ?><?php endif; ?>
       </td></tr>
       <?php endif; ?>
-      <?php if (!empty($item['discount']) && $item['discount'] > 0): ?>
-        <tr><td colspan="3" class="cafe-note">Giảm giá món <?= ($item['discount_type'] ?? null) == FIXED ? to_currency($item['discount']) : esc((string)$item['discount']) . '%' ?></td>
+      <?php if (! empty($item['discount']) && $item['discount'] > 0): ?>
+        <tr><td colspan="3" class="cafe-note">Giảm giá món <?= ($item['discount_type'] ?? null) === FIXED ? to_currency($item['discount']) : esc((string) $item['discount']) . '%' ?></td>
           <td class="cafe-number"><?= to_currency($item['discounted_total'] ?? 0) ?></td></tr>
       <?php endif; ?>
     <?php endforeach; ?>
     </tbody>
   </table>
   <hr class="cafe-rule">
-  <?php if ($showTotalDiscount && !empty($discount)): ?>
+  <?php if ($showTotalDiscount && ! empty($discount)): ?>
     <div class="cafe-row"><span>Tạm tính trước giảm giá:</span><span><?= to_currency($prediscount_subtotal ?? 0) ?></span></div>
-    <div class="cafe-row"><span>Giảm giá khách hàng:</span><span><?= to_currency(-1 * (float)$discount) ?></span></div>
+    <div class="cafe-row"><span>Giảm giá khách hàng:</span><span><?= to_currency(-1 * (float) $discount) ?></span></div>
   <?php endif; ?>
   <?php if ($showTaxes): ?>
     <div class="cafe-row"><span>Tạm tính:</span><span><?= to_currency($subtotal ?? 0) ?></span></div>
     <?php foreach (($taxes ?? []) as $tax): ?>
-      <div class="cafe-row"><span>Thuế <?= esc((string)($tax['tax_group'] ?? '')) ?> (<?= esc((string)($tax['tax_rate'] ?? '')) ?>%):</span><span><?= to_currency_tax($tax['sale_tax_amount'] ?? 0) ?></span></div>
+      <div class="cafe-row"><span>Thuế <?= esc((string) ($tax['tax_group'] ?? '')) ?> (<?= esc((string) ($tax['tax_rate'] ?? '')) ?>%):</span><span><?= to_currency_tax($tax['sale_tax_amount'] ?? 0) ?></span></div>
     <?php endforeach; ?>
   <?php endif; ?>
   <div class="cafe-row cafe-total"><span>TỔNG CỘNG</span><span><?= to_currency($total ?? 0) ?></span></div>
   <?php foreach (($payments ?? []) as $payment): ?>
-    <?php $paymentParts = explode(':', (string)($payment['payment_type'] ?? '')); ?>
-    <div class="cafe-row"><span><?= esc($paymentParts[0]) ?>:</span><span><?= to_currency(-1 * (float)($payment['payment_amount'] ?? 0)) ?></span></div>
+    <?php $paymentParts = explode(':', (string) ($payment['payment_type'] ?? '')); ?>
+    <div class="cafe-row"><span><?= esc($paymentParts[0]) ?>:</span><span><?= to_currency(-1 * (float) ($payment['payment_amount'] ?? 0)) ?></span></div>
   <?php endforeach; ?>
   <?php if (isset($amount_change)): ?>
-    <div class="cafe-row"><span><?= (float)$amount_change >= 0 ? 'Tiền trả lại:' : 'Còn phải trả:' ?></span><strong><?= to_currency($amount_change) ?></strong></div>
+    <div class="cafe-row"><span><?= (float) $amount_change >= 0 ? 'Tiền trả lại:' : 'Còn phải trả:' ?></span><strong><?= to_currency($amount_change) ?></strong></div>
   <?php endif; ?>
-  <?php if (!empty($comments)): ?><hr class="cafe-rule"><div>Ghi chú đơn hàng: <?= nl2br(esc($comments)) ?></div><?php endif; ?>
-  <?php if (!empty($config['return_policy'])): ?><div class="cafe-muted" id="sale_return_policy"><?= nl2br(esc($config['return_policy'])) ?></div><?php endif; ?>
+  <?php if (! empty($comments)): ?><hr class="cafe-rule"><div>Ghi chú đơn hàng: <?= nl2br(esc($comments)) ?></div><?php endif; ?>
+  <?php if (! empty($config['return_policy'])): ?><div class="cafe-muted" id="sale_return_policy"><?= nl2br(esc($config['return_policy'])) ?></div><?php endif; ?>
   <div class="cafe-thanks">Cảm ơn quý khách và hẹn gặp lại!</div>
-  <?php if (!empty($barcode)): ?><div id="barcode"><?= $barcode ?><br><?= esc((string)($sale_id ?? '')) ?></div><?php endif; ?>
+  <?php if (! empty($barcode)): ?><div id="barcode"><?= $barcode ?><br><?= esc((string) ($sale_id ?? '')) ?></div><?php endif; ?>
 </div>
